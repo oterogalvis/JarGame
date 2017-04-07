@@ -5,6 +5,7 @@ package JarGame;
  */
 public class GuessingGame {
     public static void main(String[] args) {
-        Prompter.getPrompter().play();
+        Prompter prompter = new Prompter();
+        prompter.play();
     }
 }

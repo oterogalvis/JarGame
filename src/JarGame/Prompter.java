@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
  * Created by jorgeotero on 4/5/17.
  */
 public class Prompter {
-    private static Prompter instance;
     private Jar jar;
     private BufferedReader bufferedReader;
 
@@ -28,11 +27,11 @@ public class Prompter {
         return answer;
     }
 
-    public Integer askInt(String question) {
-        Integer answer = 0;
+    public int askInt(String question) {
+        int answer = 0;
         while (answer < 1) {
             try {
-                answer = Integer.valueOf(ask(question));
+                answer = Integer.parseInt(ask(question));
             } catch (NumberFormatException nfe) {
                 System.out.println("Input must be numeric.");
                 answer = 0;
@@ -47,12 +46,12 @@ public class Prompter {
     public void administrator() {
         System.out.println("-------------- ADMINISTRATOR --------------");
         String itemName = ask("What type of item is in the Jar?");
-        Integer maxAmount = askInt("What is the maximum amount of " + itemName + "?");
-        jar = Jar.getJar(itemName, maxAmount);
+        int maxAmount = askInt("What is the maximum amount of " + itemName + "?");
+        jar = new Jar(itemName, maxAmount);
     }
 
     public void askingForGuess() {
-        Integer guess = askInt("How many " + jar.getItemName()
+        int guess = askInt("How many " + jar.getItemName()
                 + " are in the jar? Pick a number between 1 and " + jar.getMaximunNumber() + ".");
         jar.setGuess(guess);
     }
@@ -60,7 +59,7 @@ public class Prompter {
     public void outputOfResult(String result) {
         switch (result) {
             case "win":
-                System.out.println("Congrats, You won the game. You got it in " + jar.getGuessAttempts() + " attempt(s)");
+                System.out.println("You got it in " + jar.getGuessAttempts() + " attempts");
                 jar.setWinGame(true);
             break;
             case "overTheTop":
@@ -97,12 +96,5 @@ public class Prompter {
     public void play() {
         administrator();
         player();
-    }
-
-    public static Prompter getPrompter() {
-        if (instance == null) {
-            instance = new Prompter();
-        }
-        return instance;
     }
 }

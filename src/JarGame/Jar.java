@@ -7,27 +7,25 @@ import java.util.Random;
  */
 public class Jar {
     private String itemName;
-    private Integer maximunNumber;
-    private Integer itemQuantity;
-    private Integer guess;
-    private Integer guessAttempts;
+    private int maximunNumber;
+    private int itemQuantity;
+    private int guess;
+    private int guessAttempts;
     private boolean winGame = false;
-    private static Jar instance;
 
-    public Jar(String itemName, Integer maximunNumber) {
+    public Jar(String itemName, int maximunNumber) {
         this.itemName = itemName;
         this.maximunNumber = maximunNumber;
         setItemQuantity();
     }
 
-    public int generateRandomNumber() {
+    public int fill() {
         Random random = new Random();
         return random.nextInt(maximunNumber) + 1;
     }
 
     public String analysingGuess() {
         String analysis = "";
-//        It's a possible better option to return a String insteaas of a variable.
         if (guess == itemQuantity) {
             newAttempt();
             analysis = "win";
@@ -47,9 +45,6 @@ public class Jar {
     }
 
     public void newAttempt() {
-        if (guessAttempts == null) {
-            guessAttempts = 0;
-        }
         guessAttempts++;
     }
 
@@ -57,40 +52,20 @@ public class Jar {
         return itemName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public Integer getMaximunNumber() {
+    public int getMaximunNumber() {
         return maximunNumber;
     }
 
-    public void setMaximunNumber(Integer maximunNumber) {
-        this.maximunNumber = maximunNumber;
-    }
-
-    public Integer getItemQuantity() {
-        return itemQuantity;
-    }
-
     public void setItemQuantity() {
-        this.itemQuantity = generateRandomNumber();
+        this.itemQuantity = fill();
     }
 
-    public Integer getGuess() {
-        return guess;
-    }
-
-    public void setGuess(Integer guess) {
+    public void setGuess(int guess) {
         this.guess = guess;
     }
 
     public int getGuessAttempts() {
         return guessAttempts;
-    }
-
-    public void setGuessAttempts(int guessAttempts) {
-        this.guessAttempts = guessAttempts;
     }
 
     public boolean isWinGame() {
@@ -99,12 +74,5 @@ public class Jar {
 
     public void setWinGame(boolean winGame) {
         this.winGame = winGame;
-    }
-
-    public static Jar getJar(String itemName, Integer maximunNumber) {
-        if (instance == null) {
-            instance = new Jar(itemName, maximunNumber);
-        }
-        return instance;
     }
 }
