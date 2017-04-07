@@ -5,19 +5,24 @@ import java.util.Random;
 /**
  * Created by jorgeotero on 4/5/17.
  */
-public class JarLogic {
+public class Jar {
     private String itemName;
-    private Integer maxAmount;
+    private Integer maximunNumber;
     private Integer itemQuantity;
     private Integer guess;
     private Integer guessAttempts;
     private boolean winGame = false;
-    private static JarLogic instance;
+    private static Jar instance;
 
+    public Jar(String itemName, Integer maximunNumber) {
+        this.itemName = itemName;
+        this.maximunNumber = maximunNumber;
+        setItemQuantity();
+    }
 
     public int generateRandomNumber() {
         Random random = new Random();
-        return random.nextInt(maxAmount) + 1;
+        return random.nextInt(maximunNumber) + 1;
     }
 
     public String analysingGuess() {
@@ -26,7 +31,7 @@ public class JarLogic {
         if (guess == itemQuantity) {
             newAttempt();
             analysis = "win";
-        } else if (guess > maxAmount) {
+        } else if (guess > maximunNumber) {
             analysis = "overTheTop";
         } else if (guess > itemQuantity) {
             newAttempt();
@@ -56,12 +61,12 @@ public class JarLogic {
         this.itemName = itemName;
     }
 
-    public Integer getMaxAmount() {
-        return maxAmount;
+    public Integer getMaximunNumber() {
+        return maximunNumber;
     }
 
-    public void setMaxAmount(Integer maxAmount) {
-        this.maxAmount = maxAmount;
+    public void setMaximunNumber(Integer maximunNumber) {
+        this.maximunNumber = maximunNumber;
     }
 
     public Integer getItemQuantity() {
@@ -96,9 +101,9 @@ public class JarLogic {
         this.winGame = winGame;
     }
 
-    public static JarLogic getJarLogic() {
+    public static Jar getJar(String itemName, Integer maximunNumber) {
         if (instance == null) {
-            instance = new JarLogic();
+            instance = new Jar(itemName, maximunNumber);
         }
         return instance;
     }

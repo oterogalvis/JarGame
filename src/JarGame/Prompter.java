@@ -7,13 +7,12 @@ import java.io.InputStreamReader;
 /**
  * Created by jorgeotero on 4/5/17.
  */
-public class JarPrompter {
-    private static JarPrompter instance;
-    private JarLogic jarLogic;
+public class Prompter {
+    private static Prompter instance;
+    private Jar jar;
     private BufferedReader bufferedReader;
 
-    public JarPrompter() {
-        this.jarLogic = JarLogic.getJarLogic();
+    public Prompter() {
         bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     }
 
@@ -32,7 +31,12 @@ public class JarPrompter {
     public Integer askInt(String question) {
         Integer answer = 0;
         while (answer < 1) {
-            answer = Integer.valueOf(ask(question));
+            try {
+                answer = Integer.valueOf(ask(question));
+            } catch (NumberFormatException nfe) {
+                System.out.println("Input must be numeric.");
+                answer = 0;
+            }
             if (answer < 1) {
                 System.out.println("Input must be equal or higher than 1.");
             }
@@ -43,26 +47,24 @@ public class JarPrompter {
     public void administrator() {
         System.out.println("-------------- ADMINISTRATOR --------------");
         String itemName = ask("What type of item is in the Jar?");
-        jarLogic.setItemName(itemName);
-        Integer maxAmount = askInt("What is the maximum amount of " + jarLogic.getItemName() + "?");
-        jarLogic.setMaxAmount(maxAmount);
-        jarLogic.setItemQuantity();
+        Integer maxAmount = askInt("What is the maximum amount of " + itemName + "?");
+        jar = Jar.getJar(itemName, maxAmount);
     }
 
     public void askingForGuess() {
-        Integer guess = askInt("How many " + jarLogic.getItemName()
-                + " are in the jar? Pick a number between 1 and " + jarLogic.getMaxAmount() + ".");
-        jarLogic.setGuess(guess);
+        Integer guess = askInt("How many " + jar.getItemName()
+                + " are in the jar? Pick a number between 1 and " + jar.getMaximunNumber() + ".");
+        jar.setGuess(guess);
     }
 
     public void outputOfResult(String result) {
         switch (result) {
             case "win":
-                System.out.println("Congrats, You won the game. You got it in " + jarLogic.getGuessAttempts() + " attempt(s)");
-                jarLogic.setWinGame(true);
+                System.out.println("Congrats, You won the game. You got it in " + jar.getGuessAttempts() + " attempt(s)");
+                jar.setWinGame(true);
             break;
             case "overTheTop":
-                System.out.println("Your guess must be less than " + jarLogic.getMaxAmount());
+                System.out.println("Your guess must be less than " + jar.getMaximunNumber());
                 break;
             case "high":
                 System.out.println("Your guess is too high");
@@ -80,9 +82,9 @@ public class JarPrompter {
     }
 
     public void promptLoop() {
-        while (!jarLogic.isWinGame()) {
+        while (!jar.isWinGame()) {
             askingForGuess();
-            String result = jarLogic.analysingGuess();
+            String result = jar.analysingGuess();
             outputOfResult(result);
         }
     }
@@ -97,9 +99,9 @@ public class JarPrompter {
         player();
     }
 
-    public static JarPrompter getJarPrompter() {
+    public static Prompter getPrompter() {
         if (instance == null) {
-            instance = new JarPrompter();
+            instance = new Prompter();
         }
         return instance;
     }

@@ -3,8 +3,8 @@ package JarGame;
 /**
  * Created by jorgeotero on 4/5/17.
  */
-public class JarGame {
+public class GuessingGame {
     public static void main(String[] args) {
-        JarPrompter.getJarPrompter().play();
+        Prompter.getPrompter().play();
     }
 }
